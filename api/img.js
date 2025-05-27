@@ -1,10 +1,12 @@
 export default async function handler(req, res) {
-  const { name } = req.query;
-  if (!name) return res.status(400).send('Missing "name" param');
+  const { url } = req;
+  const name = url.split('/img/')[1];
 
-  const url = `https://aodutymnszzydlkbrnbh.supabase.co/storage/v1/object/public/pmmlogospublic/${name}`;
+  if (!name) return res.status(400).send('Missing image name');
 
-  const response = await fetch(url);
+  const supabaseUrl = `https://aodutymnszzydlkbrnbh.supabase.co/storage/v1/object/public/pmmlogospublic/${name}`;
+
+  const response = await fetch(supabaseUrl);
   if (!response.ok) return res.status(502).send('Supabase fetch failed');
 
   const contentType = response.headers.get('content-type') || 'application/octet-stream';
